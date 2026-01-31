@@ -9,7 +9,7 @@ A comprehensive web-based water management application for monitoring water reso
 
 ## 🌊 Live Demo
 
-[Try AquaFlow Live](https://yourusername.github.io/aquaflow-water-management/) *Replace with your actual deployment URL*
+<img width="1883" height="2750" alt="image" src="https://github.com/user-attachments/assets/bfba7c22-ac7a-408f-b1b9-cdfb58f30b68" />
 
 ## ✨ Features
 
