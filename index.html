@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaFlow | Water Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #1a73e8;
+            --secondary: #0d47a1;
+            --accent: #00bcd4;
+            --light: #e3f2fd;
+            --dark: #0d1b2a;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --gray: #f5f5f5;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--dark);
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: var(--light);
+            color: var(--primary);
+        }
+
+        nav a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(13, 27, 42, 0.8), rgba(13, 27, 42, 0.9)), url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background-color: #0097a7;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Dashboard Section */
+        .section-title {
+            text-align: center;
+            margin: 60px 0 40px;
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .dashboard {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background-color: var(--gray);
+            border-radius: 10px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .water-level .metric-icon {
+            background-color: rgba(26, 115, 232, 0.1);
+            color: var(--primary);
+        }
+
+        .water-quality .metric-icon {
+            background-color: rgba(0, 188, 212, 0.1);
+            color: var(--accent);
+        }
+
+        .consumption .metric-icon {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--success);
+        }
+
+        .conservation .metric-icon {
+            background-color: rgba(255, 152, 0, 0.1);
+            color: var(--warning);
+        }
+
+        .metric-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        /* Charts Section */
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .chart-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-placeholder {
+            height: 250px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-weight: 600;
+        }
+
+        /* Water Tips */
+        .tips-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .tip-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 20px;
+        }
+
+        .tip-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(26, 115, 232, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .tip-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .tip-content p {
+            color: #666;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .footer-column p, .footer-column a {
+            color: #ccc;
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column a:hover {
+            color: var(--accent);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-tint"></i>
+                    <h1>Aqua<span>Flow</span></h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="active">Dashboard</a></li>
+                        <li><a href="#">Monitoring</a></li>
+                        <li><a href="#">Conservation</a></li>
+                        <li><a href="#">Reports</a></li>
+                        <li><a href="#">Alerts</a></li>
+                        <li><a href="#">Settings</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>Smart Water Management System</h2>
+            <p>Monitor water resources, track consumption patterns, and implement conservation strategies with our comprehensive water management platform.</p>
+            <a href="#dashboard" class="cta-button">View Dashboard</a>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="container">
+        <div class="section-title">
+            <h2>Water Management Dashboard</h2>
+            <p>Real-time monitoring and analytics for efficient water resource management</p>
+        </div>
+
+        <div class="dashboard">
+            <div class="dashboard-grid">
+                <div class="metric-card water-level">
+                    <div class="metric-icon">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <div class="metric-value">84%</div>
+                    <div class="metric-label">Reservoir Level</div>
+                </div>
+                
+                <div class="metric-card water-quality">
+                    <div class="metric-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <div class="metric-value">Good</div>
+                    <div class="metric-label">Water Quality</div>
+                </div>
+                
+                <div class="metric-card consumption">
+                    <div class="metric-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="metric-value">1,240 m³</div>
+                    <div class="metric-label">Daily Consumption</div>
+                </div>
+                
+                <div class="metric-card conservation">
+                    <div class="metric-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="metric-value">18%</div>
+                    <div class="metric-label">Conservation Target</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-container">
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Weekly Water Consumption</span>
+                </div>
+                <div class="chart-placeholder">
+                    Bar chart visualization: Water usage by day
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Usage Distribution</span>
+                </div>
+                <div class="chart-placeholder">
+                    Pie chart visualization: Residential vs Industrial
+                </div>
+            </div>
+        </div>
+
+        <!-- Water Conservation Tips -->
+        <div class="section-title">
+            <h2>Water Conservation Tips</h2>
+            <p>Practical advice to reduce water consumption and promote sustainability</p>
+        </div>
+
+        <div class="tips-container">
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-shower"></i>
+                </div>
+                <div class="tip-content">
+                    <h3>Shorter Showers</h3>
+                    <p>Reducing shower time by just 2 minutes can save up to 30 liters of water per shower.</p>
+                </div>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-tint-slash"></i>
+                </div>
+                <div class="tip-content">
+                    <h3>Fix Leaks Promptly</h3>
+                    <p>A single dripping faucet can waste over 3,000 liters of water per year.</p>
+                </div>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-recycle"></i>
+                </div>
+                <div class="tip-content">
+                    <h3>Rainwater Harvesting</h3>
+                    <p>Collecting rainwater for irrigation can reduce outdoor water use by up to 50%.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AquaFlow</h3>
+                    <p>Advanced water management solutions for sustainable resource utilization and conservation.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <a href="#">Dashboard</a>
+                    <a href="#">Monitoring Tools</a>
+                    <a href="#">Conservation Tips</a>
+                    <a href="#">Data Reports</a>
+                    <a href="#">Alert System</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Water Street, Hydropolis</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@aquaflow.com</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 AquaFlow Water Management System. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update metric values with animation
+            const metricValues = document.querySelectorAll('.metric-value');
+            
+            metricValues.forEach(metric => {
+                const originalValue = metric.textContent;
+                metric.textContent = '0';
+                
+                let counter = 0;
+                const targetValue = originalValue.includes('%') 
+                    ? parseInt(originalValue) 
+                    : originalValue.includes('m³')
+                    ? parseInt(originalValue.replace(',', '').replace(' m³', ''))
+                    : 0;
+                
+                const isPercentage = originalValue.includes('%');
+                const isGood = originalValue === 'Good';
+                
+                if (isGood) {
+                    metric.textContent = 'Good';
+                    return;
+                }
+                
+                const increment = targetValue / 50;
+                const timer = setInterval(() => {
+                    counter += increment;
+                    if (counter >= targetValue) {
+                        counter = targetValue;
+                        clearInterval(timer);
+                    }
+                    
+                    if (isPercentage) {
+                        metric.textContent = Math.floor(counter) + '%';
+                    } else {
+                        metric.textContent = Math.floor(counter).toLocaleString() + ' m³';
+                    }
+                }, 30);
+            });
+            
+            // Chart placeholders click interaction
+            const chartPlaceholders = document.querySelectorAll('.chart-placeholder');
+            chartPlaceholders.forEach(chart => {
+                chart.addEventListener('click', function() {
+                    this.style.backgroundColor = '#e3f2fd';
+                    this.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Loading chart data...';
+                    
+                    setTimeout(() => {
+                        this.style.backgroundColor = '#f9f9f9';
+                        this.textContent = this.textContent.includes('Bar') 
+                            ? 'Bar chart visualization: Water usage by day' 
+                            : 'Pie chart visualization: Residential vs Industrial';
+                    }, 1500);
+                });
+            });
+            
+            // Navigation active state
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (!this.classList.contains('active')) {
+                        navLinks.forEach(item => item.classList.remove('active'));
+                        this.classList.add('active');
+                    }
+                });
+            });
+            
+            // CTA button interaction
+            const ctaButton = document.querySelector('.cta-button');
+            ctaButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('dashboard').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
