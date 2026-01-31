@@ -1,7 +1,5 @@
 # Water-Management-Website-Application
 
-# AquaFlow Water Management System
-
 ![AquaFlow Banner](https://img.shields.io/badge/AquaFlow-Water%20Management-blue?style=for-the-badge&logo=water&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 
